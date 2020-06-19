@@ -24,7 +24,6 @@ public ResponseEntity<String> getHelloWorld(@PathaVariable("name") String name){
 
 }
 
-
 CREATE OR REPLACE TRIGGER coustomerTrigger
 INSTEAD OF INSERT ON coustomer
 REFERENCING NEW AS n
@@ -38,7 +37,7 @@ BEGIN
 	IF rowcnt=0 THEN
 		select max(coustomerID) INTO custID from coustomer;
 		custID:=custID+1;
-		INSERT(coustomerId,coustomerName) values (:n.custID, :n.coustomerName)
+		INSERT(coustomerId,coustomerName) values (custID, :n.coustomerName);
 	
-	END IF
-END
+	END IF;
+END;
