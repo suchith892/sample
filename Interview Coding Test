@@ -23,3 +23,22 @@ public ResponseEntity<String> getHelloWorld(@PathaVariable("name") String name){
  return new ResponseEntity<>("Hello World" +name  HttpStatus.OK);
 
 }
+
+
+CREATE OR REPLACE TRIGGER coustomerTrigger
+INSTEAD OF INSERT ON coustomer
+REFERENCING NEW AS n
+
+FOR EACH ROW
+DECLARE 
+	rowcnt number;
+	custID number;
+BEGIN
+	select count(*) INTO rowcnt from coustomer where coustomerName=:n.coustomerName;
+	IF rowcnt=0 THEN
+		select max(coustomerID) INTO custID from coustomer;
+		custID:=custID+1;
+		INSERT(coustomerId,coustomerName) values (:n.custID, :n.coustomerName)
+	
+	END IF
+END
